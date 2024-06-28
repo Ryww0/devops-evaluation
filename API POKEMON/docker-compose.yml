@@ -1,0 +1,26 @@
+volumes:
+  db_data:
+
+services:
+  db:
+    image: mariadb:latest
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 'defaultPassword'
+      MYSQL_DATABASE: pokemon
+    ports:
+      - "3307:3306" 
+    volumes:
+      - db_data:/var/lib/mysql
+
+  app:
+    build: .
+    ports:
+      - "4000:4000"
+    environment:
+      NODE_ENV: production
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_NAME: pokemon
+    depends_on:
+      - db
